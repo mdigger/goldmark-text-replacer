@@ -8,8 +8,11 @@
 repl := repl.NewReplacer(
     "(c)", "&copy;",
     "(r)", "&reg;",
-    "...", "&helip;",
-    ":)", "&#9786;",
+    "...", "&hellip;",
+    "(tm)", "&trade;",
+    "<-", "&larr;",
+    "->", "&rarr;",
+    "<->", "&harr;",
 )
 md := goldmark.New(
     goldmark.WithExtensions(repl),
