@@ -1,5 +1,7 @@
 # goldmark-text-replacer
 
+[![GoDoc](https://godoc.org/github.com/mdigger/goldmark-text-replacer?status.svg)](https://godoc.org/github.com/mdigger/goldmark-text-replacer)
+
 [Goldmark](https://github.com/yuin/goldmark) text replacer extension.
 
 ```go
