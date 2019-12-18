@@ -17,7 +17,7 @@ repl := repl.NewReplacer(
 md := goldmark.New(
     goldmark.WithExtensions(repl),
 )
-var source = []byte("(c) Dmitry Sedykh")
+var source = []byte("(c)Dmitry Sedykh")
 err := md.Convert(source, os.Stdout)
 if err != nil {
     log.Fatal(err)
