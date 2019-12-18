@@ -11,7 +11,7 @@ func Example() {
 	repl := NewReplacer(
 		"(c)", "&copy;",
 		"(r)", "&reg;",
-		"...", "&helip;",
+		"...", "&hellip;",
 		":)", "&#9786;",
 	)
 	md := goldmark.New(
