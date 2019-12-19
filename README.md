@@ -5,17 +5,16 @@
 [Goldmark](https://github.com/yuin/goldmark) text replacer extension.
 
 ```go
-repl := replacer.New(
-    "(c)", "&copy;",
-    "(r)", "&reg;",
-    "...", "&hellip;",
-    "(tm)", "&trade;",
-    "<-", "&larr;",
-    "->", "&rarr;",
-    "<->", "&harr;",
-)
 md := goldmark.New(
-    goldmark.WithExtensions(repl),
+    replacer.Options(
+        "(c)", "&copy;",
+        "(r)", "&reg;",
+        "...", "&hellip;",
+        "(tm)", "&trade;",
+        "<-", "&larr;",
+        "->", "&rarr;",
+        "<->", "&harr;",
+    ),
 )
 var source = []byte("(c)Dmitry Sedykh")
 err := md.Convert(source, os.Stdout)

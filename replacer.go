@@ -95,3 +95,8 @@ func (r *Replacer) Extend(m goldmark.Markdown) {
 		util.Prioritized(r, 500),
 	))
 }
+
+// Options return initialized text replacer goldmark.Option.
+func Options(oldnew ...string) goldmark.Option {
+	return goldmark.WithExtensions(New(oldnew...))
+}

@@ -9,14 +9,17 @@ import (
 )
 
 func Example() {
-	repl := replacer.New(
-		"(c)", "&copy;",
-		"(r)", "&reg;",
-		"...", "&hellip;",
-		":)", "&#9786;",
-	)
 	md := goldmark.New(
-		goldmark.WithExtensions(repl),
+		replacer.Options(
+			"(c)", "&copy;",
+			"(r)", "&reg;",
+			"...", "&hellip;",
+			"(tm)", "&trade;",
+			"<-", "&larr;",
+			"->", "&rarr;",
+			"<->", "&harr;",
+			"--", "&mdash;",
+		),
 	)
 	var source = []byte("(c)Dmitry Sedykh")
 	err := md.Convert(source, os.Stdout)
