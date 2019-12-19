@@ -1,3 +1,7 @@
+// Package replacer is a extension for the goldmark
+// (http://github.com/yuin/goldmark).
+//
+// This extension adds support for authomaticaly replacing text in markdowns.
 package replacer
 
 import (
@@ -16,13 +20,13 @@ type Replacer struct {
 	r *strings.Replacer
 }
 
-// NewReplacer returns a new Replacer from a list of old, new string pairs.
+// New returns a new Replacer from a list of old, new string pairs.
 // Replacements are performed in the order they appear in the target string,
 // without overlapping matches. The old string comparisons are done in argument
 // order.
 //
-// NewReplacer panics if given an odd number of arguments.
-func NewReplacer(oldnew ...string) *Replacer {
+// It's panics if given an odd number of arguments.
+func New(oldnew ...string) *Replacer {
 	return &Replacer{
 		Config: html.NewConfig(),
 		r:      strings.NewReplacer(oldnew...),
@@ -85,7 +89,7 @@ func (r *Replacer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindString, r.renderString)
 }
 
-// Extend implement goldmar.Extender interface.
+// Extend implement goldmark.Extender interface.
 func (r *Replacer) Extend(m goldmark.Markdown) {
 	m.Renderer().AddOptions(renderer.WithNodeRenderers(
 		util.Prioritized(r, 500),
