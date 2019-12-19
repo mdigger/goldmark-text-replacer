@@ -5,7 +5,7 @@
 [Goldmark](https://github.com/yuin/goldmark) text replacer extension.
 
 ```go
-repl := repl.NewReplacer(
+repl := replacer.New(
     "(c)", "&copy;",
     "(r)", "&reg;",
     "...", "&hellip;",
