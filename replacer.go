@@ -17,7 +17,7 @@ import (
 // Replacer replaces a list of strings with replacements in markdown text.
 type Replacer struct {
 	html.Config
-	r *strings.Replacer
+	*strings.Replacer
 }
 
 // New returns a new Replacer from a list of old, new string pairs.
@@ -28,14 +28,14 @@ type Replacer struct {
 // It's panics if given an odd number of arguments.
 func New(oldnew ...string) *Replacer {
 	return &Replacer{
-		Config: html.NewConfig(),
-		r:      strings.NewReplacer(oldnew...),
+		Config:   html.NewConfig(),
+		Replacer: strings.NewReplacer(oldnew...),
 	}
 }
 
 func (r *Replacer) replace(source []byte) []byte {
 	return util.StringToReadOnlyBytes(
-		r.r.Replace(util.BytesToReadOnlyString(source)))
+		r.Replacer.Replace(util.BytesToReadOnlyString(source)))
 }
 
 func (r *Replacer) renderText(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -44,7 +44,7 @@ func (r *Replacer) renderText(w util.BufWriter, source []byte, node ast.Node, en
 	}
 	var (
 		n    = node.(*ast.Text)
-		text = r.replace(n.Segment.Value(source))
+		text = r.replace(n.Text(source))
 	)
 	if n.IsRaw() {
 		r.Writer.RawWrite(w, text)
@@ -91,6 +91,9 @@ func (r *Replacer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 
 // Extend implement goldmark.Extender interface.
 func (r *Replacer) Extend(m goldmark.Markdown) {
+	if r.Replacer == nil {
+		return
+	}
 	m.Renderer().AddOptions(renderer.WithNodeRenderers(
 		util.Prioritized(r, 500),
 	))
