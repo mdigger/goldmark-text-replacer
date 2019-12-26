@@ -14,8 +14,8 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-// Replacer replaces a list of strings with replacements in markdown text.
-type Replacer struct {
+// replacer replaces a list of strings with replacements in markdown text.
+type replacer struct {
 	html.Config
 	*strings.Replacer
 }
@@ -26,19 +26,19 @@ type Replacer struct {
 // order.
 //
 // It's panics if given an odd number of arguments.
-func New(oldnew ...string) *Replacer {
-	return &Replacer{
+func New(oldnew ...string) goldmark.Extender {
+	return &replacer{
 		Config:   html.NewConfig(),
 		Replacer: strings.NewReplacer(oldnew...),
 	}
 }
 
-func (r *Replacer) replace(source []byte) []byte {
+func (r *replacer) replace(source []byte) []byte {
 	return util.StringToReadOnlyBytes(
 		r.Replacer.Replace(util.BytesToReadOnlyString(source)))
 }
 
-func (r *Replacer) renderText(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+func (r *replacer) renderText(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	if !entering {
 		return ast.WalkContinue, nil
 	}
@@ -63,7 +63,7 @@ func (r *Replacer) renderText(w util.BufWriter, source []byte, node ast.Node, en
 	return ast.WalkContinue, nil
 }
 
-func (r *Replacer) renderString(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+func (r *replacer) renderString(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
 	if !entering {
 		return ast.WalkContinue, nil
 	}
@@ -84,13 +84,13 @@ func (r *Replacer) renderString(w util.BufWriter, source []byte, node ast.Node, 
 }
 
 // RegisterFuncs implements NodeRenderer.RegisterFuncs interface.
-func (r *Replacer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+func (r *replacer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindText, r.renderText)
 	reg.Register(ast.KindString, r.renderString)
 }
 
 // Extend implement goldmark.Extender interface.
-func (r *Replacer) Extend(m goldmark.Markdown) {
+func (r *replacer) Extend(m goldmark.Markdown) {
 	if r.Replacer == nil {
 		return
 	}
