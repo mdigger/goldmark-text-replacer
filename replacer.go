@@ -44,7 +44,7 @@ func (r *replacer) renderText(w util.BufWriter, source []byte, node ast.Node, en
 	}
 	var (
 		n    = node.(*ast.Text)
-		text = r.replace(n.Text(source))
+		text = r.replace(n.Value(source))
 	)
 	if n.IsRaw() {
 		r.Writer.RawWrite(w, text)
